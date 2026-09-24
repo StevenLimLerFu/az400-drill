@@ -1,0 +1,24 @@
+[
+  {
+    "domain": "Pipelines",
+    "question": "Which YAML keyword makes a job wait for another job in the same stage to finish first?",
+    "options": ["condition", "dependsOn", "needs", "after"],
+    "answer": 1,
+    "explanation": "dependsOn lists the jobs (or stages) that must complete first. needs is the GitHub Actions equivalent."
+  },
+  {
+    "domain": "Security",
+    "question": "Which two GitHub Advanced Security features find problems before code is merged? Choose two.",
+    "options": ["Code scanning with CodeQL", "Secret scanning push protection", "Repository insights", "GitHub Discussions"],
+    "answer": [0, 1],
+    "explanation": "CodeQL code scanning flags vulnerable code in pull requests, and push protection blocks pushes that contain secrets."
+  },
+  {
+    "domain": "Pipelines",
+    "question": "What does this step do?",
+    "code": "- task: PublishPipelineArtifact@1\n  inputs:\n    targetPath: $(Build.ArtifactStagingDirectory)\n    artifact: drop",
+    "options": ["Uploads the staging folder as a pipeline artifact named drop", "Pushes a NuGet package to Azure Artifacts", "Deploys the folder to an App Service", "Deletes the staging folder"],
+    "answer": 0,
+    "explanation": "PublishPipelineArtifact uploads the target path as a named artifact that later stages or pipelines can download."
+  }
+]
