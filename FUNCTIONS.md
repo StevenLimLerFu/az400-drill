@@ -13,6 +13,8 @@ The source of truth for how the app behaves. Covers `app.js` (all functions sit 
 | `TARGET` | `70`: pass target, in percent, on the results screen |
 | `MAX_FILE_BYTES` | 5 MB import limit |
 | `MAX_QUESTIONS` | 5,000 questions per import |
+| `MS_ASSESSMENT_URL` | Microsoft Learn's free AZ-400 practice assessment (`assessmentId=56`) |
+| `MS_ASSESSMENT_LIST_URL` | Microsoft Learn's list of all practice assessments |
 | `BUILTIN` | `window.BUILTIN_QUESTIONS` after `normalize(…, 'builtin')`; `[]` if invalid (logged to console) |
 | `S` | Single app state object: `screen` (`home`\|`quiz`\|`result`), `mode` (`practice`\|`exam`), `domain`, `custom`, `useCustom`, `fileMsg`, `fileErr`, `session` (array of questions), `i` (current index), `picks` (`{id: number[]}`), `checked` (`{id: true}`), `review`, `missed` (ids), `answered`, `correct` |
 | `installEvent` | Deferred `beforeinstallprompt` event, or `null` |
@@ -217,6 +219,7 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 - **Behavior:**
   - Stats: answered count, accuracy (`—` before any answers), and missed questions in the active bank.
   - Bank chips (only when a file is loaded), domain chips with counts, and the mode cards.
+  - Official practice: a card linking to `MS_ASSESSMENT_URL`, and a smaller link to `MS_ASSESSMENT_LIST_URL`. Both open in a new browser window (`target=_blank`, `rel=noopener noreferrer`). Nothing from Microsoft Learn is fetched or stored by the app.
   - File import (input, message, format note, sample download link), plus Reset progress and Remove question file.
   - Install button (when there's a deferred prompt) or Safari instructions.
   - Start N questions (disabled when there are 0) and Review missed (disabled when there are 0).

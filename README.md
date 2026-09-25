@@ -6,6 +6,7 @@ Plain HTML, CSS and JavaScript: no build step, no dependencies, no server code.
 - Phone layout under 900 px wide; tablet and desktop layout (question list, question, explanation side by side) from 1000 px.
 - Practice mode (explanation after each answer) and Exam mode (score at the end).
 - Missed questions, answered count and accuracy are saved on the device (localStorage).
+- Links to Microsoft Learn's free official [AZ-400 practice assessment](https://learn.microsoft.com/en-us/credentials/certifications/exams/az-400/practice/assessment?assessment-type=practice&assessmentId=56). It opens in the browser and needs a Microsoft account.
 - Load your own question file (JSON). It is saved on the device until you remove it.
 - Light and dark themes follow the system setting. Keyboard shortcuts on Mac: 1–9 or A–L to choose, Enter to check or continue, arrow keys to move.
 

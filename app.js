@@ -13,8 +13,11 @@
     check: 'M20 6L9 17l-5-5',
     cross: 'M18 6L6 18M6 6l12 12',
     upload: 'M12 16V4M7 9l5-5 5 5M5 20h14',
-    install: 'M12 4v12M7 11l5 5 5-5M5 20h14'
+    install: 'M12 4v12M7 11l5 5 5-5M5 20h14',
+    external: 'M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5'
   };
+  var MS_ASSESSMENT_URL = 'https://learn.microsoft.com/en-us/credentials/certifications/exams/az-400/practice/assessment?assessment-type=practice&assessmentId=56';
+  var MS_ASSESSMENT_LIST_URL = 'https://learn.microsoft.com/en-us/credentials/certifications/practice-assessments-for-microsoft-certifications';
 
   var root = document.getElementById('app');
   var installEvent = null;
@@ -379,6 +382,16 @@
     }
 
     var extra = h('section', { class: 'home-extra' }, [
+      group('Official practice', h('div', { class: 'stack' }, [
+        h('a', { class: 'ext-card', href: MS_ASSESSMENT_URL, target: '_blank', rel: 'noopener noreferrer' }, [
+          h('span', { class: 'grow stack tight' }, [
+            h('span', { class: 'ext-title', text: 'Microsoft Learn practice assessment' }),
+            h('span', { class: 'note', text: 'Free AZ-400 questions written by the team that builds the exam. Opens in your browser; needs internet and a Microsoft account.' })
+          ]),
+          icon('external', 20, 'Opens in a new window')
+        ]),
+        h('a', { class: 'note', href: MS_ASSESSMENT_LIST_URL, target: '_blank', rel: 'noopener noreferrer', text: 'All Microsoft practice assessments' })
+      ])),
       group('Your own questions', h('div', { class: 'stack' }, [
         h('label', { class: 'upload' }, [
           icon('upload'), 'Load a question file (.json)',

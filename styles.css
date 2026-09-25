@@ -137,6 +137,15 @@ a { color: var(--accent-text); }
 .upload input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 .upload:focus-within { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
+.ext-card {
+  min-height: 56px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card);
+  display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none;
+}
+.ext-card svg { flex-shrink: 0; color: var(--accent-text); }
+.ext-title { font-size: 15px; font-weight: 600; }
+@media (hover: hover) { .ext-card:hover { border-color: var(--accent); } }
+a.note { color: var(--accent-text); align-self: flex-start; min-height: 24px; }
+
 .actions {
   position: sticky; bottom: 0; z-index: 4;
   padding: 16px 20px calc(20px + var(--safe-bottom));
