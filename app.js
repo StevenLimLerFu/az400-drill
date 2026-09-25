@@ -66,6 +66,15 @@
     return true;
   }
 
+  function withShuffledOptions(q) {
+    if (!q.shuffleOptions) return q;
+    var order = shuffle(q.options.map(function (o, k) { return k; }));
+    return Object.assign({}, q, {
+      options: order.map(function (k) { return q.options[k]; }),
+      answer: q.answer.map(function (a) { return order.indexOf(a); })
+    });
+  }
+
   function uniqueDomains(list) {
     var out = [];
     list.forEach(function (q) { if (out.indexOf(q.domain) < 0) out.push(q.domain); });
@@ -106,6 +115,7 @@
         code: typeof q.code === 'string' ? q.code : '',
         options: options,
         answer: ans.filter(function (a, k) { return ans.indexOf(a) === k; }),
+        shuffleOptions: source === 'builtin',
         why: typeof q.explanation === 'string' ? q.explanation : (typeof q.why === 'string' ? q.why : '')
       };
     });
@@ -147,7 +157,7 @@
 
   function startSession(list) {
     if (!list.length) return;
-    setState({ screen: 'quiz', session: shuffle(list), i: 0, picks: {}, checked: {}, review: false }, { top: true });
+    setState({ screen: 'quiz', session: shuffle(list).map(withShuffledOptions), i: 0, picks: {}, checked: {}, review: false }, { top: true });
   }
 
   function pick(k) {
@@ -424,7 +434,7 @@
   function explanation(q, picks, variant) {
     var ok = sameSet(picks, q.answer);
     var verdict = ok ? 'Correct' : (picks.length ? 'Incorrect' : 'Not answered');
-    var answer = 'Answer: ' + q.answer.map(function (k) { return LETTERS[k]; }).join(', ');
+    var answer = 'Answer: ' + q.answer.slice().sort(function (a, b) { return a - b; }).map(function (k) { return LETTERS[k]; }).join(', ');
     var why = q.why || 'No explanation was given for this question.';
     if (variant === 'aside') {
       return h('div', { class: 'stack' }, [

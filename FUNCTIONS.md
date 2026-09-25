@@ -18,7 +18,7 @@ The source of truth for how the app behaves. Covers `app.js` (all functions sit 
 | `installEvent` | Deferred `beforeinstallprompt` event, or `null` |
 | `scrollToExplanation` | One-shot flag: after the next render, scroll the inline explanation into view |
 
-Normalized question shape: `{ id, domain, q, code, options: string[], answer: number[], why }`.
+Normalized question shape: `{ id, domain, q, code, options: string[], answer: number[], why, shuffleOptions: boolean }`.
 
 ---
 
@@ -73,7 +73,16 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 - **Inputs / Outputs:** array → a new shuffled array (the input is not changed).
 - **Behavior:** Fisher–Yates shuffle using `Math.random`.
 - **Side effects / Dependencies / Error handling:** None.
-- **Business rules:** Option order is never shuffled, because answer indexes refer to the authored order.
+- **Business rules:** Also used by `withShuffledOptions` to reorder built-in options.
+
+### `withShuffledOptions(q)`
+- **Purpose:** Stop you learning answers by their position (A, B, C, D) instead of their content.
+- **Inputs / Outputs:** a normalized question → the same question if `shuffleOptions` is false; otherwise a copy with options in random order and `answer` remapped to the new indexes.
+- **Behavior:** Shuffles the index list `[0…n-1]`, builds the options from it, and maps each answer index to its new position.
+- **Side effects:** None; the bank entry is not changed.
+- **Dependencies:** `shuffle`.
+- **Error handling:** None needed; the input has already been checked by `normalize`.
+- **Business rules:** Only built-in questions are shuffled. Imported files keep their authored order, since they may contain options such as "All of the above" or refer to letters. The id is unchanged, so the missed list still works.
 
 ### `sameSet(a, b)`
 - **Purpose:** Grade an answer.
@@ -94,7 +103,7 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 - **Behavior:** Requires an array with 1–5,000 items. For each item, reads `question` (or `q`), `options`, `answer` (a number or an array), `explanation` (or `why`), `domain` and `code`. Removes duplicate answer indexes and converts options to strings. The id is the author's `id` for built-ins; otherwise `c:` + `hash(text + options)`. A duplicate id gets `:<index>` appended.
 - **Side effects / Dependencies:** `hash`, `LETTERS`, `MAX_QUESTIONS`.
 - **Error handling:** Throws an `Error` with a message the user can read that names the question number: not an array, empty, too many, missing text, not 2–12 options, missing answer, or an answer index that isn't a whole number or is out of range.
-- **Business rules:** Answer indexes start at 0. A missing domain becomes `Imported`. A missing explanation becomes `''` (the UI shows a fallback).
+- **Business rules:** Answer indexes start at 0. A missing domain becomes `Imported`. A missing explanation becomes `''` (the UI shows a fallback). `shuffleOptions` is `true` only when `source` is `'builtin'`.
 
 ## State and actions
 
@@ -121,7 +130,7 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 ### `startSession(list)`
 - **Purpose:** Begin a set.
 - **Inputs:** list of questions.
-- **Behavior:** Does nothing if the list is empty. Otherwise switches to the quiz screen with a shuffled copy, `i = 0`, and cleared picks, checks and review flag.
+- **Behavior:** Does nothing if the list is empty. Otherwise switches to the quiz screen with a shuffled copy (each question passed through `withShuffledOptions`), `i = 0`, and cleared picks, checks and review flag. Option order stays fixed for the rest of the set, including review.
 - **Business rules:** Used for Start (the domain pool), Review missed (the bank's missed ids) and Retry missed (this set's wrong answers).
 
 ### `pick(k)`
@@ -215,7 +224,7 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 
 ### `explanation(q, picks, variant)`
 - **Purpose:** The answer verdict and explanation.
-- **Behavior:** Shows Correct, Incorrect or Not answered, the correct letters, and the explanation (with a fallback when there is none). The `'inline'` variant (phone, `#explanation`) is compact; the `'aside'` variant (tablet side panel) is larger.
+- **Behavior:** Shows Correct, Incorrect or Not answered, the correct letters (sorted A→L), and the explanation (with a fallback when there is none). The `'inline'` variant (phone, `#explanation`) is compact; the `'aside'` variant (tablet side panel) is larger.
 
 ### `renderQuiz()`
 - **Purpose:** The question screen.

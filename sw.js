@@ -1,7 +1,7 @@
 'use strict';
 
 // Bump CACHE_VERSION whenever you change any file below, so installed apps pick up the update.
-var CACHE_VERSION = 'v1';
+var CACHE_VERSION = 'v2';
 var SHELL_CACHE = 'az400-drill-shell-' + CACHE_VERSION;
 var FONT_CACHE = 'az400-drill-fonts-v1';
 var SHELL = [

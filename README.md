@@ -16,7 +16,7 @@ Plain HTML, CSS and JavaScript: no build step, no dependencies, no server code.
 | `index.html` | App page |
 | `styles.css` | All styling, light and dark |
 | `app.js` | App logic and rendering (see `FUNCTIONS.md`) |
-| `questions.js` | 17 built-in questions (original content) |
+| `questions.js` | 51 built-in questions (original content) |
 | `sw.js` | Service worker: offline cache |
 | `manifest.webmanifest` | Install metadata (name, icons, colours) |
 | `sample-questions.json` | Example of the import format |
