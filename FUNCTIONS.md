@@ -1,7 +1,7 @@
 # FUNCTIONS.md: AZ-400 Exam Drill
 
 The source of truth for how the app behaves. Covers `app.js` (all functions sit inside one IIFE, and nothing is exported to `window`) and `sw.js` (service worker event handlers).
-`questions.js` holds only data (`window.BUILTIN_QUESTIONS`) and has no functions.
+`questions.js` holds only data (`window.BUILTIN_QUESTIONS`) and has no functions. The 25 `Foundations` questions (ids `f01`–`f25`) come first, so that domain chip appears first; the exam-level questions are `q01`–`q51`. Every built-in question has a `learn` link.
 
 ## Module constants and state (`app.js`)
 
@@ -20,7 +20,7 @@ The source of truth for how the app behaves. Covers `app.js` (all functions sit 
 | `installEvent` | Deferred `beforeinstallprompt` event, or `null` |
 | `scrollToExplanation` | One-shot flag: after the next render, scroll the inline explanation into view |
 
-Normalized question shape: `{ id, domain, q, code, options: string[], answer: number[], why, shuffleOptions: boolean }`.
+Normalized question shape: `{ id, domain, q, code, options: string[], answer: number[], why, learn, shuffleOptions: boolean }` (`learn` is an https URL or `''`).
 
 ---
 
@@ -77,6 +77,14 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 - **Side effects / Dependencies / Error handling:** None.
 - **Business rules:** Also used by `withShuffledOptions` to reorder built-in options.
 
+### `safeLink(value)`
+- **Purpose:** Accept a question's Learn more link only when it's safe to put in an `href`.
+- **Inputs / Outputs:** any value → the normalized URL string, or `''`.
+- **Behavior:** Needs a string; parses it with `new URL()` and keeps it only when the protocol is `https:`.
+- **Side effects / Dependencies:** `URL`.
+- **Error handling:** An invalid URL returns `''` and never throws.
+- **Business rules:** Blocks `javascript:`, `data:`, `http:` and relative links from imported files. A question with no valid link simply shows no Learn more link.
+
 ### `withShuffledOptions(q)`
 - **Purpose:** Stop you learning answers by their position (A, B, C, D) instead of their content.
 - **Inputs / Outputs:** a normalized question → the same question if `shuffleOptions` is false; otherwise a copy with options in random order and `answer` remapped to the new indexes.
@@ -102,7 +110,7 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 ### `normalize(raw, source)`
 - **Purpose:** Check that question data is valid and convert it to the internal shape.
 - **Inputs / Outputs:** `raw` (parsed JSON), `source` (`'builtin'` or `'file'`) → normalized question array.
-- **Behavior:** Requires an array with 1–5,000 items. For each item, reads `question` (or `q`), `options`, `answer` (a number or an array), `explanation` (or `why`), `domain` and `code`. Removes duplicate answer indexes and converts options to strings. The id is the author's `id` for built-ins; otherwise `c:` + `hash(text + options)`. A duplicate id gets `:<index>` appended.
+- **Behavior:** Requires an array with 1–5,000 items. For each item, reads `question` (or `q`), `options`, `answer` (a number or an array), `explanation` (or `why`), `domain`, `code` and `learn` (through `safeLink`). Removes duplicate answer indexes and converts options to strings. The id is the author's `id` for built-ins; otherwise `c:` + `hash(text + options)`. A duplicate id gets `:<index>` appended.
 - **Side effects / Dependencies:** `hash`, `LETTERS`, `MAX_QUESTIONS`.
 - **Error handling:** Throws an `Error` with a message the user can read that names the question number: not an array, empty, too many, missing text, not 2–12 options, missing answer, or an answer index that isn't a whole number or is out of range.
 - **Business rules:** Answer indexes start at 0. A missing domain becomes `Imported`. A missing explanation becomes `''` (the UI shows a fallback). `shuffleOptions` is `true` only when `source` is `'builtin'`.
@@ -227,7 +235,7 @@ Normalized question shape: `{ id, domain, q, code, options: string[], answer: nu
 
 ### `explanation(q, picks, variant)`
 - **Purpose:** The answer verdict and explanation.
-- **Behavior:** Shows Correct, Incorrect or Not answered, the correct letters (sorted A→L), and the explanation (with a fallback when there is none). The `'inline'` variant (phone, `#explanation`) is compact; the `'aside'` variant (tablet side panel) is larger.
+- **Behavior:** Shows Correct, Incorrect or Not answered, the correct letters (sorted A→L), and the explanation (with a fallback when there is none). When `q.learn` is set, adds a **Learn more** link that opens in a new window (`rel=noopener noreferrer`). The `'inline'` variant (phone, `#explanation`) is compact; the `'aside'` variant (tablet side panel) is larger.
 
 ### `renderQuiz()`
 - **Purpose:** The question screen.

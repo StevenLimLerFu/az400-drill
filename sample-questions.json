@@ -4,7 +4,8 @@
     "question": "Which YAML keyword makes a job wait for another job in the same stage to finish first?",
     "options": ["condition", "dependsOn", "needs", "after"],
     "answer": 1,
-    "explanation": "dependsOn lists the jobs (or stages) that must complete first. needs is the GitHub Actions equivalent."
+    "explanation": "dependsOn lists the jobs (or stages) that must complete first. needs is the GitHub Actions equivalent.",
+    "learn": "https://learn.microsoft.com/en-us/azure/devops/pipelines/process/stages"
   },
   {
     "domain": "Security",

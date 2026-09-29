@@ -69,6 +69,14 @@
     return true;
   }
 
+  function safeLink(value) {
+    if (typeof value !== 'string') return '';
+    try {
+      var u = new URL(value.trim());
+      return u.protocol === 'https:' ? u.href : '';
+    } catch (e) { return ''; }
+  }
+
   function withShuffledOptions(q) {
     if (!q.shuffleOptions) return q;
     var order = shuffle(q.options.map(function (o, k) { return k; }));
@@ -119,7 +127,8 @@
         options: options,
         answer: ans.filter(function (a, k) { return ans.indexOf(a) === k; }),
         shuffleOptions: source === 'builtin',
-        why: typeof q.explanation === 'string' ? q.explanation : (typeof q.why === 'string' ? q.why : '')
+        why: typeof q.explanation === 'string' ? q.explanation : (typeof q.why === 'string' ? q.why : ''),
+        learn: safeLink(q.learn)
       };
     });
   }
@@ -449,16 +458,21 @@
     var verdict = ok ? 'Correct' : (picks.length ? 'Incorrect' : 'Not answered');
     var answer = 'Answer: ' + q.answer.slice().sort(function (a, b) { return a - b; }).map(function (k) { return LETTERS[k]; }).join(', ');
     var why = q.why || 'No explanation was given for this question.';
+    var more = q.learn ? h('a', {
+      class: 'learn-more', href: q.learn, target: '_blank', rel: 'noopener noreferrer', 'data-k': 'learn-' + variant
+    }, ['Learn more', icon('external', 16, 'Opens in a new window')]) : null;
     if (variant === 'aside') {
       return h('div', { class: 'stack' }, [
         h('div', { class: 'verdict big ' + (ok ? 'ok' : 'bad') }, [icon(ok ? 'check' : 'cross', 26), verdict]),
         h('div', { class: 'ans', text: answer }),
-        h('p', { class: 'why', text: why })
+        h('p', { class: 'why', text: why }),
+        more
       ]);
     }
     return h('div', { class: 'expl expl-inline', id: 'explanation' }, [
       h('div', { class: 'verdict ' + (ok ? 'ok' : 'bad') }, [icon(ok ? 'check' : 'cross'), h('span', { class: 'grow', text: verdict }), h('span', { class: 'ans', text: answer })]),
-      h('p', { class: 'why', text: why })
+      h('p', { class: 'why', text: why }),
+      more
     ]);
   }
 

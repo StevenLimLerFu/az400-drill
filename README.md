@@ -5,6 +5,8 @@ Plain HTML, CSS and JavaScript: no build step, no dependencies, no server code.
 
 - Phone layout under 900 px wide; tablet and desktop layout (question list, question, explanation side by side) from 1000 px.
 - Practice mode (explanation after each answer) and Exam mode (score at the end).
+- A **Foundations** domain for beginners (DevOps, CI/CD, YAML, agents, Git, pull requests), then exam-level questions.
+- Every explanation has a **Learn more** link to the Microsoft Learn or GitHub Docs page it is based on.
 - Missed questions, answered count and accuracy are saved on the device (localStorage).
 - Links to Microsoft Learn's free official [AZ-400 practice assessment](https://learn.microsoft.com/en-us/credentials/certifications/exams/az-400/practice/assessment?assessment-type=practice&assessmentId=56). It opens in the browser and needs a Microsoft account.
 - Load your own question file (JSON). It is saved on the device until you remove it.
@@ -17,7 +19,7 @@ Plain HTML, CSS and JavaScript: no build step, no dependencies, no server code.
 | `index.html` | App page |
 | `styles.css` | All styling, light and dark |
 | `app.js` | App logic and rendering (see `FUNCTIONS.md`) |
-| `questions.js` | 51 built-in questions (original content) |
+| `questions.js` | 76 built-in questions (original content): 25 beginner Foundations + 51 exam-level, each with a Learn more link |
 | `sw.js` | Service worker: offline cache |
 | `manifest.webmanifest` | Install metadata (name, icons, colours) |
 | `sample-questions.json` | Example of the import format |
@@ -64,10 +66,12 @@ A JSON array. Each item:
   "answer": 1,
   "explanation": "Optional. Shown after answering.",
   "domain": "Optional. Used for the domain filter.",
-  "code": "Optional. Shown as a code block."
+  "code": "Optional. Shown as a code block.",
+  "learn": "Optional. An https:// link shown as Learn more."
 }
 ```
 
 - `answer` is a 0-based index, or a list such as `[0, 2]` for "choose two" questions.
+- `learn` links that don't start with `https://` are ignored.
 - 2 to 12 options per question, up to 5,000 questions, file up to 5 MB.
 - Only load questions you have the right to use. Exam "dump" content breaks the Microsoft exam agreement.

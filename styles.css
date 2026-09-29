@@ -249,6 +249,11 @@ a.note { color: var(--accent-text); align-self: flex-start; min-height: 24px; }
 .verdict.big { font-family: var(--display); font-size: 28px; }
 .ans { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--muted); }
 .why { margin: 0; font-size: 15px; line-height: 1.55; }
+.learn-more {
+  align-self: flex-start; min-height: 44px; display: inline-flex; align-items: center; gap: 6px;
+  color: var(--accent-text); font-size: 15px; font-weight: 600; text-decoration: none;
+}
+.learn-more:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .quiz-foot {
   position: sticky; bottom: 0; z-index: 4; background: var(--bg); border-top: 1px solid var(--line);
