@@ -1,7 +1,7 @@
 # FUNCTIONS.md: AZ-400 Exam Drill
 
 The source of truth for how the app behaves. Covers `app.js` (all functions sit inside one IIFE, and nothing is exported to `window`) and `sw.js` (service worker event handlers).
-`questions.js` holds only data (`window.BUILTIN_QUESTIONS`) and has no functions. The 25 `Foundations` questions (ids `f01`–`f25`) come first, so that domain chip appears first; the exam-level questions are `q01`–`q51`. Every built-in question has a `learn` link.
+`questions.js` holds only data (`window.BUILTIN_QUESTIONS`) and has no functions. The 25 `Foundations` questions (ids `f01`–`f25`) come first, so that domain chip appears first; the exam-level questions are `q01`–`q80`. Every built-in question has a `learn` link.
 
 ## Module constants and state (`app.js`)
 

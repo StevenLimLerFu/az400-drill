@@ -19,7 +19,7 @@ Plain HTML, CSS and JavaScript: no build step, no dependencies, no server code.
 | `index.html` | App page |
 | `styles.css` | All styling, light and dark |
 | `app.js` | App logic and rendering (see `FUNCTIONS.md`) |
-| `questions.js` | 76 built-in questions (original content): 25 beginner Foundations + 51 exam-level, each with a Learn more link |
+| `questions.js` | 105 built-in questions (original content): 25 beginner Foundations + 80 exam-level, each with a Learn more link |
 | `sw.js` | Service worker: offline cache |
 | `manifest.webmanifest` | Install metadata (name, icons, colours) |
 | `sample-questions.json` | Example of the import format |
